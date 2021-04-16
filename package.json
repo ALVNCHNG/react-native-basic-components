@@ -11,10 +11,15 @@
     "url": "git+https://github.com/ALVNCHNG/react-native-basic-components.git"
   },
   "keywords": [
-    "react-native",
+    "android",
+    "ios",
+    "react",
+    "native",
     "expo",
-    "components",
-    "UI"
+    "react-native",
+    "reactnative",
+    "native-modules",
+    "react-component"
   ],
   "author": "Alvin Viernes Ching",
   "license": "MIT",
