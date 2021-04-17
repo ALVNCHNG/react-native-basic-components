@@ -141,7 +141,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
   const handleChange = (_: Event, selectedDate: Date) => {
     const currentDate = selectedDate || value;
     setVisible(Platform.OS === "ios");
-    return onChange && onChange(currentDate);
+    onChange && onChange(currentDate);
   };
 
   const handlePress: TouchableOpacityProps["onPress"] = (event) => {
@@ -167,7 +167,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
           {...otherProps}
           display={display}
           value={value || new Date()}
-          onChange={handleChange as any}
+          onChange={handleChange}
         />
       )}
     </>
