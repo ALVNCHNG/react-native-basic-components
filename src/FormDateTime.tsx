@@ -43,9 +43,11 @@ export interface BaseFormDateTimeProps
     BaseInputProps,
     Partial<FormDateTimeStyles> {
   displayFormat?: string;
+  mode?: "date" | "time" | "datetime" | "countdown";
   value?: Date | null;
   onChange?: (value: Date) => any;
   onInputPress?: TouchableOpacityProps["onPress"];
+  display?: "default" | "spinner"
 }
 
 export interface FormDateTimeProps
@@ -89,6 +91,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
   invalidStyle,
   onChange,
   onInputPress,
+  display,
   ...otherProps
 }) => {
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -143,7 +146,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
 
   const handlePress: TouchableOpacityProps["onPress"] = (event) => {
     setVisible(true);
-    return onInputPress && onInputPress(event);
+    onInputPress && onInputPress(event);
   };
 
   const compiledStyles = StyleSheet.flatten([
@@ -162,8 +165,9 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
       {visible && (
         <RNDateTimePicker
           {...otherProps}
+          display={display}
           value={value || new Date()}
-          onChange={handleChange}
+          onChange={handleChange as any}
         />
       )}
     </>
