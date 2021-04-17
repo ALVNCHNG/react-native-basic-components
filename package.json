@@ -2,7 +2,7 @@
   "name": "@alvnchng/react-native-basic-components",
   "version": "0.1.0",
   "description": "ALVNCHNG's React Native Basic UI Components",
-  "main": "build/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "prepublish": "rimraf lib && yarn build",
     "postinstall": "node postInstallScript.js",

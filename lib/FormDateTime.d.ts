@@ -3,14 +3,16 @@ import PropTypes from "prop-types";
 import { TextStyle, TouchableOpacityProps } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { BaseInputProps, BaseInputWIthContainerProps, DefaultInputStyles, GenericStyle } from "./types";
-declare type OmittedFormDateTimePicker = Omit<React.ComponentProps<typeof RNDateTimePicker>, "style" | "value" | "onChange">;
+declare type OmittedFormDateTimePicker = Omit<React.ComponentProps<typeof RNDateTimePicker>, "style" | "value" | "onChange" | "display">;
 declare type OmittedFormDateTimeProps = Omit<BaseInputWIthContainerProps, "FocusableInputContainerStyles" | "FocusableInputStyles">;
 export declare type FormDateTimeStyles = GenericStyle<TextStyle, DefaultInputStyles>;
 export interface BaseFormDateTimeProps extends OmittedFormDateTimePicker, BaseInputProps, Partial<FormDateTimeStyles> {
     displayFormat?: string;
+    mode?: "date" | "time" | "datetime" | "countdown";
     value?: Date | null;
     onChange?: (value: Date) => any;
     onInputPress?: TouchableOpacityProps["onPress"];
+    display?: "default" | "spinner";
 }
 export interface FormDateTimeProps extends OmittedFormDateTimeProps, BaseFormDateTimeProps {
 }
