@@ -97,13 +97,11 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
 }) => {
   const [visible, setVisible] = React.useState<boolean>(false);
 
-  const valueFormat = React.useMemo(() => {
-    if (!!displayFormat) {
-      return displayFormat;
-    }
-
-    return mode === "date" ? DefaultDateFormat : DefaultDateTimeFormat;
-  }, [displayFormat, mode]);
+  const valueFormat = displayFormat
+    ? displayFormat
+    : mode === "date"
+      ? DefaultDateFormat
+      : DefaultDateTimeFormat;
 
   const compileStyle = compileTextStyles(
     ThemeFormDateTime.style,

@@ -31,10 +31,7 @@ const Label: React.FC<FormLabelProps> = ({
   focusedStyle,
   invalidStyle,
 }): JSX.Element => {
-  const compiledStyle = React.useMemo(
-    () => compileTextStyles(ThemeFormLabel.style, style, allowDefaultStyle),
-    [allowDefaultStyle, style, ThemeFormLabel.style]
-  );
+  const compiledStyle = compileTextStyles(ThemeFormLabel.style, style, allowDefaultStyle);
 
   const compiledFilledStyle = filled
     ? compileTextStyles(
