@@ -9,7 +9,8 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 import RNDateTimePicker, {
-  Event,
+  IOSNativeProps,
+  WindowsNativeProps,
 } from "@react-native-community/datetimepicker";
 import moment from "moment";
 
@@ -47,7 +48,7 @@ export interface BaseFormDateTimeProps
   value?: Date | null;
   onChange?: (value: Date) => any;
   onInputPress?: TouchableOpacityProps["onPress"];
-  display?: "default" | "spinner"
+  display?: "default" | "spinner";
 }
 
 export interface FormDateTimeProps
@@ -138,7 +139,8 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
     ThemeFormDateTime.invalidStyle,
   ]);
 
-  const handleChange = (_: Event, selectedDate: Date) => {
+  const handleChange: IOSNativeProps["onChange"] &
+    WindowsNativeProps["onChange"] = (event, selectedDate) => {
     const currentDate = selectedDate || value;
     setVisible(Platform.OS === "ios");
     onChange && onChange(currentDate);
