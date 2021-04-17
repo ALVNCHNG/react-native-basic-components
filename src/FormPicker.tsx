@@ -15,7 +15,7 @@ import { compileTextStyles, DisplayNamePrefix } from "./utils";
 
 type OmittedFormPickerProps = Omit<
   React.ComponentProps<typeof RNPicker>,
-  "style"
+  "style" | "selectedValue"
 >;
 export type FormPickerOptions = Array<
   React.ComponentProps<typeof RNPicker.Item>
@@ -41,7 +41,6 @@ export const BaseFormPicker: React.FC<FormPickerProps> = ({
   options,
   children,
   value,
-  selectedValue,
   invalid,
   allowDefaultStyle,
   placeholder,
@@ -50,39 +49,27 @@ export const BaseFormPicker: React.FC<FormPickerProps> = ({
   invalidStyle,
   ...otherProps
 }) => {
-  const compiledStyle = React.useMemo(() => {
-    return compileTextStyles(ThemeFormPicker.style, style, allowDefaultStyle);
-  }, [allowDefaultStyle, style, ThemeFormPicker.style]);
+  const compiledStyle = compileTextStyles(
+    ThemeFormPicker.style,
+    style,
+    allowDefaultStyle
+  );
 
-  const compiledFilledStyle = React.useMemo(() => {
-    if (!value && !selectedValue) {
-      return null;
-    }
+  const compiledFilledStyle = value
+    ? compileTextStyles(
+        ThemeFormPicker.filledStyle,
+        filledStyle,
+        allowDefaultStyle
+      )
+    : null;
 
-    return compileTextStyles(
-      ThemeFormPicker.filledStyle,
-      filledStyle,
-      allowDefaultStyle
-    );
-  }, [
-    allowDefaultStyle,
-    value,
-    selectedValue,
-    filledStyle,
-    ThemeFormPicker.filledStyle,
-  ]);
-
-  const compiledInvalidStyle = React.useMemo(() => {
-    if (!invalid) {
-      return null;
-    }
-
-    return compileTextStyles(
-      ThemeFormPicker.invalidStyle,
-      invalidStyle,
-      allowDefaultStyle
-    );
-  }, [allowDefaultStyle, invalid, invalidStyle, ThemeFormPicker.invalidStyle]);
+  const compiledInvalidStyle = invalid
+    ? compileTextStyles(
+        ThemeFormPicker.invalidStyle,
+        invalidStyle,
+        allowDefaultStyle
+      )
+    : null;
 
   const generateOptions = (
     options?: FormPickerOptions
@@ -96,17 +83,15 @@ export const BaseFormPicker: React.FC<FormPickerProps> = ({
     ));
   };
 
-  const compiledStyles = StyleSheet.flatten([
-    compiledStyle,
-    compiledFilledStyle,
-    compiledInvalidStyle,
-  ]);
-
   return (
     <RNPicker
       {...otherProps}
-      selectedValue={selectedValue}
-      style={compiledStyles}
+      selectedValue={value}
+      style={StyleSheet.flatten([
+        compiledStyle,
+        compiledFilledStyle,
+        compiledInvalidStyle,
+      ])}
     >
       {children ? children : generateOptions(options)}
     </RNPicker>

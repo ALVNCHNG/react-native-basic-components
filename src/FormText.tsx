@@ -54,45 +54,35 @@ export const BaseFormText = React.forwardRef<RNTextInput, FormInputProps>(
   ) => {
     const [focused, setFocused] = React.useState<boolean>(false);
 
-    const compiledStyle = React.useMemo(() => {
-      return compileTextStyles(ThemeFormText.style, style, allowDefaultStyle);
-    }, [allowDefaultStyle, style, ThemeFormText.style]);
+    const compiledStyle = compileTextStyles(
+      ThemeFormText.style,
+      style,
+      allowDefaultStyle
+    );
 
-    const compiledFilledStyle = React.useMemo(() => {
-      if (!value) {
-        return null;
-      }
+    const compiledFilledStyle = value
+      ? compileTextStyles(
+          ThemeFormText.filledStyle,
+          filledStyle,
+          allowDefaultStyle
+        )
+      : null;
 
-      return compileTextStyles(
-        ThemeFormText.filledStyle,
-        filledStyle,
-        allowDefaultStyle
-      );
-    }, [allowDefaultStyle, value, filledStyle, ThemeFormText.filledStyle]);
+    const compiledFocusedStyle = focused
+      ? compileTextStyles(
+          ThemeFormText.focusedStyle,
+          focusedStyle,
+          allowDefaultStyle
+        )
+      : null;
 
-    const compiledFocusedStyle = React.useMemo(() => {
-      if (!focused) {
-        return null;
-      }
-
-      return compileTextStyles(
-        ThemeFormText.focusedStyle,
-        focusedStyle,
-        allowDefaultStyle
-      );
-    }, [allowDefaultStyle, focused, focusedStyle, ThemeFormText.focusedStyle]);
-
-    const compiledInvalidStyle = React.useMemo(() => {
-      if (!invalid) {
-        return null;
-      }
-
-      return compileTextStyles(
-        ThemeFormText.invalidStyle,
-        invalidStyle,
-        allowDefaultStyle
-      );
-    }, [allowDefaultStyle, invalid, invalidStyle, ThemeFormText.invalidStyle]);
+    const compiledInvalidStyle = invalid
+      ? compileTextStyles(
+          ThemeFormText.invalidStyle,
+          invalidStyle,
+          allowDefaultStyle
+        )
+      : null;
 
     const handleBlur = (
       event: NativeSyntheticEvent<TextInputChangeEventData>
@@ -108,20 +98,18 @@ export const BaseFormText = React.forwardRef<RNTextInput, FormInputProps>(
       onFocus && onFocus(event);
     };
 
-    const compiledStyles = StyleSheet.flatten([
-      compiledStyle,
-      compiledFilledStyle,
-      compiledFocusedStyle,
-      compiledInvalidStyle,
-    ]);
-
     return (
       <RNTextInput
         {...props}
         onChangeText={onChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        style={compiledStyles}
+        style={StyleSheet.flatten([
+          compiledStyle,
+          compiledFilledStyle,
+          compiledFocusedStyle,
+          compiledInvalidStyle,
+        ])}
         value={value}
         ref={ref}
       />
@@ -147,23 +135,19 @@ const FormText = React.forwardRef<
       ...inputProps
     },
     ref
-  ) => {
-    console.log("Ref: ", ref);
-
-    return (
-      <FormInputContainer
-        filled={!!inputProps.value}
-        invalid={!!inputProps.invalid}
-        allowDefaultStyle={inputProps.allowDefaultStyle}
-        style={containerStyle}
-        filledStyle={filledContainerStyle}
-        focusedStyle={focusedContainerStyle}
-        invalidStyle={invalidContainerStyle}
-      >
-        <BaseFormText {...inputProps} ref={ref} />
-      </FormInputContainer>
-    );
-  }
+  ) => (
+    <FormInputContainer
+      filled={!!inputProps.value}
+      invalid={!!inputProps.invalid}
+      allowDefaultStyle={inputProps.allowDefaultStyle}
+      style={containerStyle}
+      filledStyle={filledContainerStyle}
+      focusedStyle={focusedContainerStyle}
+      invalidStyle={invalidContainerStyle}
+    >
+      <BaseFormText {...inputProps} ref={ref} />
+    </FormInputContainer>
+  )
 );
 
 export type TextInputRef = React.ElementRef<typeof BaseFormText>;

@@ -6,7 +6,7 @@ import { ThemeFormRow } from "./themes";
 import { GenericStyle } from "./types";
 import { compileViewStyles, DisplayNamePrefix } from "./utils";
 
-type stylizeformGroup = (
+type stylizeFormGroup = (
   formGroupComponent: React.ReactElement<FormGroupPropsWithChildren>,
   isLastComponent?: boolean
 ) => JSX.Element;
@@ -38,18 +38,13 @@ const FormRow: React.FC<FormRowPropsWithChildren> = ({
   style,
   ...viewProps
 }) => {
-  const compiledStyle = React.useMemo(
-    () => compileViewStyles(ThemeFormRow.style, style, allowDefaultStyle),
-    [allowDefaultStyle, style, ThemeFormRow.style]
-  );
-
   /**
-   * Renders a ModifiedformGroupComponent inside the FormRow with style passed as props
+   * Renders a ModifiedFormGroupComponent inside the FormRow with Gap passed as Style props
    * @param formGroupComponent formGroupComponent
    * @param isLastComponent boolean
-   * @returns ModifiedformGroupComponent
+   * @returns ModifiedFormGroupComponent
    */
-  const stylizeformGroupChild: stylizeformGroup = (
+  const stylizeFormGroupChild: stylizeFormGroup = (
     formGroupComponent,
     isLastComponent
   ) =>
@@ -57,10 +52,11 @@ const FormRow: React.FC<FormRowPropsWithChildren> = ({
       FormGroup,
       {
         ...formGroupComponent.props,
-        style: [
+        style: StyleSheet.flatten([
+          formGroupComponent.props.style,
           FormRowStyles.formGroupStyle,
           !isLastComponent && { marginRight: gap },
-        ],
+        ]),
         key: uuid(),
       },
       formGroupComponent.props.children
@@ -69,16 +65,16 @@ const FormRow: React.FC<FormRowPropsWithChildren> = ({
   /**
    * Handles the rendering and modification of children style
    * @param childComponent formGroup | formGroup[]
-   * @returns ModifiedformGroup | ModifiedformGroup[]
+   * @returns ModifiedFormGroup | ModifiedFormGroup[]
    */
   const renderModifiedChildren = (childComponent: FormRowChildren) => {
     if (!Array.isArray(childComponent)) {
-      return stylizeformGroupChild(childComponent, true);
+      return stylizeFormGroupChild(childComponent, true);
     }
 
     const lastComponentIndex = childComponent.length - 1;
     return childComponent.map((formGroupComponent, formGroupComponentIndex) => {
-      return stylizeformGroupChild(
+      return stylizeFormGroupChild(
         formGroupComponent,
         formGroupComponentIndex === lastComponentIndex
       );
@@ -86,7 +82,10 @@ const FormRow: React.FC<FormRowPropsWithChildren> = ({
   };
 
   return (
-    <View {...viewProps} style={compiledStyle}>
+    <View
+      {...viewProps}
+      style={compileViewStyles(ThemeFormRow.style, style, allowDefaultStyle)}
+    >
       {renderModifiedChildren(children)}
     </View>
   );

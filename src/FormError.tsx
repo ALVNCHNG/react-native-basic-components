@@ -20,14 +20,13 @@ const FormError: React.FC<FormErrorProps> = ({
   children,
   allowDefaultStyle,
   style,
-}) => {
-  const compiledStyles = React.useMemo(
-    () => compileTextStyles(ThemeFormError.style, style, allowDefaultStyle),
-    [allowDefaultStyle, style, ThemeFormError.style]
-  );
-
-  return <Text style={compiledStyles}>{children}</Text>;
-};
+}) => (
+  <Text
+    style={compileTextStyles(ThemeFormError.style, style, allowDefaultStyle)}
+  >
+    {children}
+  </Text>
+);
 
 FormError.defaultProps = FormErrorDefaultProps;
 FormError.displayName = `${DisplayNamePrefix}FormError`;
