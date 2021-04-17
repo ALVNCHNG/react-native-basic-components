@@ -36,50 +36,42 @@ const Label: React.FC<FormLabelProps> = ({
     [allowDefaultStyle, style, ThemeFormLabel.style]
   );
 
-  const compiledFilledStyle = React.useMemo(
-    () =>
-      filled
-        ? compileTextStyles(
-            ThemeFormLabel.filledStyle,
-            filledStyle,
-            allowDefaultStyle
-          )
-        : null,
-    [allowDefaultStyle, filled, filledStyle, ThemeFormLabel.filledStyle]
+  const compiledFilledStyle = filled
+    ? compileTextStyles(
+        ThemeFormLabel.filledStyle,
+        filledStyle,
+        allowDefaultStyle
+      )
+    : null;
+
+  const compiledFocusedStyle = focused
+    ? compileTextStyles(
+        ThemeFormLabel.focusedStyle,
+        focusedStyle,
+        allowDefaultStyle
+      )
+    : null;
+
+  const compiledInvalidStyle = invalid
+    ? compileTextStyles(
+        ThemeFormLabel.invalidStyle,
+        invalidStyle,
+        allowDefaultStyle
+      )
+    : null;
+
+  return (
+    <Text
+      style={StyleSheet.flatten([
+        compiledStyle,
+        compiledFilledStyle,
+        compiledFocusedStyle,
+        compiledInvalidStyle,
+      ])}
+    >
+      {children}
+    </Text>
   );
-
-  const compiledFocusedStyle = React.useMemo(
-    () =>
-      focused
-        ? compileTextStyles(
-            ThemeFormLabel.focusedStyle,
-            focusedStyle,
-            allowDefaultStyle
-          )
-        : null,
-    [allowDefaultStyle, focused, focusedStyle, ThemeFormLabel.focusedStyle]
-  );
-
-  const compiledInvalidStyle = React.useMemo(
-    () =>
-      invalid
-        ? compileTextStyles(
-            ThemeFormLabel.invalidStyle,
-            invalidStyle,
-            allowDefaultStyle
-          )
-        : null,
-    [allowDefaultStyle, invalid, invalidStyle, ThemeFormLabel.invalidStyle]
-  );
-
-  const compiledStyles = StyleSheet.flatten([
-    compiledStyle,
-    compiledFilledStyle,
-    compiledFocusedStyle,
-    compiledInvalidStyle,
-  ]);
-
-  return <Text style={compiledStyles}>{children}</Text>;
 };
 
 Label.defaultProps = LabelDefaultProps;

@@ -105,39 +105,27 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
     return mode === "date" ? DefaultDateFormat : DefaultDateTimeFormat;
   }, [displayFormat, mode]);
 
-  const compileStyle = React.useMemo(
-    () => compileTextStyles(ThemeFormDateTime.style, style, allowDefaultStyle),
-    [allowDefaultStyle, style, ThemeFormDateTime.style]
+  const compileStyle = compileTextStyles(
+    ThemeFormDateTime.style,
+    style,
+    allowDefaultStyle
   );
 
-  const compiledFilledStyle = React.useMemo(() => {
-    if (!value) {
-      return null;
-    }
+  const compiledFilledStyle = value
+    ? compileTextStyles(
+        ThemeFormDateTime.filledStyle,
+        filledStyle,
+        allowDefaultStyle
+      )
+    : null;
 
-    return compileTextStyles(
-      ThemeFormDateTime.filledStyle,
-      filledStyle,
-      allowDefaultStyle
-    );
-  }, [allowDefaultStyle, value, filledStyle, ThemeFormDateTime.filledStyle]);
-
-  const compiledInvalidStyle = React.useMemo(() => {
-    if (!invalid) {
-      return null;
-    }
-
-    return compileTextStyles(
-      ThemeFormDateTime.invalidStyle,
-      invalidStyle,
-      allowDefaultStyle
-    );
-  }, [
-    allowDefaultStyle,
-    invalid,
-    invalidStyle,
-    ThemeFormDateTime.invalidStyle,
-  ]);
+  const compiledInvalidStyle = invalid
+    ? compileTextStyles(
+        ThemeFormDateTime.invalidStyle,
+        invalidStyle,
+        allowDefaultStyle
+      )
+    : null;
 
   const handleChange: IOSNativeProps["onChange"] &
     WindowsNativeProps["onChange"] = (event, selectedDate) => {
@@ -151,16 +139,16 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
     onInputPress && onInputPress(event);
   };
 
-  const compiledStyles = StyleSheet.flatten([
-    compileStyle,
-    compiledFilledStyle,
-    compiledInvalidStyle,
-  ]);
-
   return (
     <>
       <TouchableOpacity onPress={handlePress}>
-        <Text style={compiledStyles}>
+        <Text
+          style={StyleSheet.flatten([
+            compileStyle,
+            compiledFilledStyle,
+            compiledInvalidStyle,
+          ])}
+        >
           {!!value ? moment(value).format(valueFormat) : placeholder}
         </Text>
       </TouchableOpacity>

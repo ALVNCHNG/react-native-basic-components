@@ -29,21 +29,18 @@ const FormGroup: React.FC<FormGroupPropsWithChildren> = ({
   style,
   children,
   ...props
-}) => {
-  const compiledStyles = React.useMemo(() => {
-    return compileViewStyles(
+}) => (
+  <View
+    {...props}
+    style={compileViewStyles(
       row ? ThemeFormGroup.rowStyle : ThemeFormGroup.stackStyle,
       style,
       allowDefaultStyle
-    );
-  }, [allowDefaultStyle, row, style, ThemeFormGroup]);
-
-  return (
-    <View {...props} style={compiledStyles}>
-      {children}
-    </View>
-  );
-};
+    )}
+  >
+    {children}
+  </View>
+);
 
 export const FormGroupPropTypes = {
   ...ViewPropTypes,

@@ -39,76 +39,46 @@ const FormInputContainer: React.FC<FormInputContainerPropsWithChildren> = ({
   invalidStyle,
   ...otherProps
 }) => {
-  const compiledStyle = React.useMemo(() => {
-    return compileViewStyles(
-      ThemeFormInputContainer.style,
-      style,
-      allowDefaultStyle
-    );
-  }, [allowDefaultStyle, style, ThemeFormInputContainer.style]);
+  const compiledStyle = compileViewStyles(
+    ThemeFormInputContainer.style,
+    style,
+    allowDefaultStyle
+  );
 
-  const compiledFilledStyle = React.useMemo(() => {
-    if (!filled) {
-      return null;
-    }
+  const compiledFilledStyle = filled
+    ? compileViewStyles(
+        ThemeFormInputContainer.filledStyle,
+        filledStyle,
+        allowDefaultStyle
+      )
+    : null;
 
-    return compileViewStyles(
-      ThemeFormInputContainer.filledStyle,
-      filledStyle,
-      allowDefaultStyle
-    );
-  }, [
-    allowDefaultStyle,
-    filled,
-    filledStyle,
-    ThemeFormInputContainer.filledStyle,
-  ]);
+  const compiledFocusedStyle = focused
+    ? compileViewStyles(
+        ThemeFormInputContainer.focusedStyle,
+        focusedStyle,
+        allowDefaultStyle
+      )
+    : null;
 
-  const compiledFocusedStyle = React.useMemo(() => {
-    if (!focused) {
-      return null;
-    }
-
-    return compileViewStyles(
-      ThemeFormInputContainer.focusedStyle,
-      focusedStyle,
-      allowDefaultStyle
-    );
-  }, [
-    allowDefaultStyle,
-    focused,
-    focusedStyle,
-    ThemeFormInputContainer.focusedStyle,
-  ]);
-
-  const compiledInvalidStyle = React.useMemo(() => {
-    if (!invalid) {
-      return null;
-    }
-
-    return compileViewStyles(
-      ThemeFormInputContainer.invalidStyle,
-      invalidStyle,
-      allowDefaultStyle
-    );
-  }, [
-    allowDefaultStyle,
-    invalid,
-    invalidStyle,
-    ThemeFormInputContainer.invalidStyle,
-  ]);
-
-  const compiledStyles = StyleSheet.flatten([
-    compiledStyle,
-    compiledFilledStyle,
-    compiledFocusedStyle,
-    compiledInvalidStyle,
-  ]);
-
-  if (!!invalid) console.log("compiledInvalidStyle: ", compiledStyles);
+  const compiledInvalidStyle = invalid
+    ? compileViewStyles(
+        ThemeFormInputContainer.invalidStyle,
+        invalidStyle,
+        allowDefaultStyle
+      )
+    : null;
 
   return (
-    <View {...otherProps} style={compiledStyles}>
+    <View
+      {...otherProps}
+      style={StyleSheet.flatten([
+        compiledStyle,
+        compiledFilledStyle,
+        compiledFocusedStyle,
+        compiledInvalidStyle,
+      ])}
+    >
       {children}
     </View>
   );
