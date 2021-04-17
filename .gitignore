@@ -38,3 +38,6 @@ typings/
 # Temporary folders
 tmp/
 temp/
+
+# Builds
+lib/
