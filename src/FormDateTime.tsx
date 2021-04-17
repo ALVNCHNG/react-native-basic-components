@@ -9,7 +9,8 @@ import {
   TouchableOpacityProps,
 } from "react-native";
 import RNDateTimePicker, {
-  Event,
+  IOSNativeProps,
+  WindowsNativeProps,
 } from "@react-native-community/datetimepicker";
 import moment from "moment";
 
@@ -28,7 +29,7 @@ const DefaultDateTimeFormat = "MMM DD, YYYY hh:mm A";
 
 type OmittedFormDateTimePicker = Omit<
   React.ComponentProps<typeof RNDateTimePicker>,
-  "style" | "value" | "onChange"
+  "style" | "value" | "onChange" | "display"
 >;
 
 type OmittedFormDateTimeProps = Omit<
@@ -43,9 +44,11 @@ export interface BaseFormDateTimeProps
     BaseInputProps,
     Partial<FormDateTimeStyles> {
   displayFormat?: string;
+  mode?: "date" | "time" | "datetime" | "countdown";
   value?: Date | null;
   onChange?: (value: Date) => any;
   onInputPress?: TouchableOpacityProps["onPress"];
+  display?: "default" | "spinner";
 }
 
 export interface FormDateTimeProps
@@ -89,6 +92,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
   invalidStyle,
   onChange,
   onInputPress,
+  display,
   ...otherProps
 }) => {
   const [visible, setVisible] = React.useState<boolean>(false);
@@ -135,15 +139,16 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
     ThemeFormDateTime.invalidStyle,
   ]);
 
-  const handleChange = (_: Event, selectedDate: Date) => {
+  const handleChange: IOSNativeProps["onChange"] &
+    WindowsNativeProps["onChange"] = (event, selectedDate) => {
     const currentDate = selectedDate || value;
     setVisible(Platform.OS === "ios");
-    return onChange && onChange(currentDate);
+    onChange && onChange(currentDate);
   };
 
   const handlePress: TouchableOpacityProps["onPress"] = (event) => {
     setVisible(true);
-    return onInputPress && onInputPress(event);
+    onInputPress && onInputPress(event);
   };
 
   const compiledStyles = StyleSheet.flatten([
@@ -162,6 +167,7 @@ export const BaseFormDateTime: React.FC<FormDateTimeProps> = ({
       {visible && (
         <RNDateTimePicker
           {...otherProps}
+          display={display}
           value={value || new Date()}
           onChange={handleChange}
         />
