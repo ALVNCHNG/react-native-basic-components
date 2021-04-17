@@ -28,7 +28,7 @@ const DefaultDateTimeFormat = "MMM DD, YYYY hh:mm A";
 
 type OmittedFormDateTimePicker = Omit<
   React.ComponentProps<typeof RNDateTimePicker>,
-  "style" | "value" | "onChange"
+  "style" | "value" | "onChange" | "display"
 >;
 
 type OmittedFormDateTimeProps = Omit<
